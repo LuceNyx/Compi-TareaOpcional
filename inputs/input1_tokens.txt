@@ -1,0 +1,9 @@
+Iniciando Scanner para archivo: .\lib\inputs\input1.txt
+
+TOKEN(CHAR, "a")
+TOKEN(OR, "|")
+TOKEN(CHAR, "B")
+TOKEN(END)
+
+Scanner exitoso
+
