@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils"
 
 type Node = {
   label: string
-  /** true si es un nodo hoja (consume caracteres) */
   leaf: boolean
   children: Node[]
 }

@@ -30,14 +30,9 @@ export function LexgenApp() {
   const [demoInput, setDemoInput] = useState(initial.demo)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [tab, setTab] = useState<TabId>("cpp")
-  /** historial de inserciones por regla, para el boton de deshacer */
   const [history, setHistory] = useState<Record<string, string[]>>({})
 
-  /**
-   * Regla destino del constructor. Si no hay ninguna seleccionada
-   * explicitamente se apunta a la primera, de modo que los botones
-   * esten activos desde el primer render y al cambiar de ejemplo.
-   */
+
   const selected = rules.find((r) => r.id === selectedId) ?? rules[0] ?? null
 
   const build = useMemo(() => buildLexer(rules), [rules])
@@ -47,7 +42,6 @@ export function LexgenApp() {
     return generateCpp({ dfa: build.dfa, rules: build.rules, demoInput })
   }, [build, demoInput])
 
-  // ---------- acciones sobre las reglas ----------
 
   const updateRule = useCallback((id: string, patch: Partial<Rule>) => {
     setRules((prev) => prev.map((r) => (r.id === id ? { ...r, ...patch } : r)))
@@ -245,14 +239,6 @@ export function LexgenApp() {
         </section>
       </main>
 
-      <footer className="border-t border-border bg-card px-4 py-2.5">
-        <p className="mx-auto max-w-[1600px] text-pretty text-[11px] text-muted-foreground">
-          {activePreset ? `Ejemplo activo: ${activePreset.description}. ` : ""}
-          Compila la salida con{" "}
-          <code className="rounded bg-muted px-1 py-0.5 font-mono">g++ -std=c++17 lexer.cpp</code> y
-          ejecútala para tokenizar cualquier cadena desde la entrada estándar.
-        </p>
-      </footer>
     </div>
   )
 }
