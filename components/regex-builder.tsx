@@ -90,9 +90,16 @@ export function RegexBuilder({
     >
       <header className="flex items-center justify-between gap-2 border-b border-border px-3 py-2">
         <h2 className="text-sm font-semibold">Constructor de expresiones</h2>
-        <p className="truncate font-mono text-[11px] text-muted-foreground">
-          {ruleName ? `regla: ${ruleName}` : "selecciona una regla"}
-        </p>
+        {ruleName ? (
+          <p className="flex min-w-0 items-baseline gap-1.5 text-[11px] text-muted-foreground">
+            insertando en
+            <span className="truncate rounded bg-primary/10 px-1.5 py-0.5 font-mono text-primary">
+              {ruleName}
+            </span>
+          </p>
+        ) : (
+          <p className="font-mono text-[11px] text-muted-foreground">agrega una regla</p>
+        )}
       </header>
 
       {/* Expresion en construccion */}
