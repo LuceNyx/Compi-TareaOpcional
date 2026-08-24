@@ -33,7 +33,12 @@ export function LexgenApp() {
   /** historial de inserciones por regla, para el boton de deshacer */
   const [history, setHistory] = useState<Record<string, string[]>>({})
 
-  const selected = rules.find((r) => r.id === selectedId) ?? null
+  /**
+   * Regla destino del constructor. Si no hay ninguna seleccionada
+   * explicitamente se apunta a la primera, de modo que los botones
+   * esten activos desde el primer render y al cambiar de ejemplo.
+   */
+  const selected = rules.find((r) => r.id === selectedId) ?? rules[0] ?? null
 
   const build = useMemo(() => buildLexer(rules), [rules])
 
@@ -75,31 +80,41 @@ export function LexgenApp() {
 
   // ---------- constructor de expresiones ----------
 
+  // Se actualiza el patron con la forma funcional de setRules: asi dos
+  // clics rapidos seguidos no pierden la primera insercion por leer un
+  // valor de `pattern` ya obsoleto.
   const insert = useCallback(
     (text: string) => {
-      if (!selected) return
-      const id = selected.id
+      const id = selected?.id
+      if (!id) return
       setHistory((prev) => ({ ...prev, [id]: [...(prev[id] ?? []), text] }))
-      updateRule(id, { pattern: selected.pattern + text })
+      setRules((prev) =>
+        prev.map((r) => (r.id === id ? { ...r, pattern: r.pattern + text } : r)),
+      )
     },
-    [selected, updateRule],
+    [selected?.id],
   )
 
   const undo = useCallback(() => {
-    if (!selected) return
-    const id = selected.id
+    const id = selected?.id
+    if (!id) return
     const stack = history[id] ?? []
     if (stack.length === 0) return
     const last = stack[stack.length - 1]
-    setHistory((prev) => ({ ...prev, [id]: stack.slice(0, -1) }))
-    updateRule(id, { pattern: selected.pattern.slice(0, -last.length) })
-  }, [selected, history, updateRule])
+    setHistory((prev) => ({ ...prev, [id]: (prev[id] ?? []).slice(0, -1) }))
+    setRules((prev) =>
+      prev.map((r) =>
+        r.id === id ? { ...r, pattern: r.pattern.slice(0, -last.length) } : r,
+      ),
+    )
+  }, [selected?.id, history])
 
   const clearPattern = useCallback(() => {
-    if (!selected) return
-    setHistory((prev) => ({ ...prev, [selected.id]: [] }))
-    updateRule(selected.id, { pattern: "" })
-  }, [selected, updateRule])
+    const id = selected?.id
+    if (!id) return
+    setHistory((prev) => ({ ...prev, [id]: [] }))
+    setRules((prev) => prev.map((r) => (r.id === id ? { ...r, pattern: "" } : r)))
+  }, [selected?.id])
 
   const loadPreset = useCallback((id: string) => {
     const preset = PRESETS.find((p) => p.id === id)
@@ -153,7 +168,7 @@ export function LexgenApp() {
         <div className="flex flex-col gap-4">
           <RuleList
             rules={rules}
-            selectedId={selectedId}
+            selectedId={selected?.id ?? null}
             diagnostics={build.diagnostics}
             onSelect={setSelectedId}
             onAdd={addRule}
