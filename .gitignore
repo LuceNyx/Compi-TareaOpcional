@@ -1,0 +1,18 @@
+# Dependencias
+node_modules/
+
+# Build de Next.js
+.next/
+out/
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# Entorno
+.env*.local
+.vercel/
+
+# Binarios compilados de la parte en C++
+cpp/*.exe
+cpp/*.out
+a.exe
+a.out

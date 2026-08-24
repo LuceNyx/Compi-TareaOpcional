@@ -22,7 +22,22 @@
   --accent: #b45309;
   --accent-foreground: #ffffff;
 
+  --secondary: #e6ebf2;
+  --secondary-foreground: #2b3a4d;
+
+  --destructive: #b42318;
+  --destructive-foreground: #ffffff;
+
   --radius: 0.5rem;
+
+  /* Colores de token para el probador: variaciones del azul
+     primario y del ambar de acento, no una paleta nueva. */
+  --tok-1: #1a56db;
+  --tok-2: #b45309;
+  --tok-3: #0e7490;
+  --tok-4: #4338ca;
+  --tok-5: #7c6f1f;
+  --tok-6: #475569;
 }
 
 @theme inline {
@@ -42,6 +57,10 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
